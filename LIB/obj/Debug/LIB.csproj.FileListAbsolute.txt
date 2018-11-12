@@ -4,3 +4,9 @@
 /root/Documents/Exercise11_IKN/Exercise_11_csharp/LIB/obj/Debug/LIB.csproj.CoreCompileInputs.cache
 /root/Documents/Exercise11_IKN/Exercise_11_csharp/LIB/obj/Debug/LIB.dll
 /root/Documents/Exercise11_IKN/Exercise_11_csharp/LIB/obj/Debug/LIB.pdb
+/root/Documents/Exercise11_IKN/LIB/bin/Debug/LIB.dll
+/root/Documents/Exercise11_IKN/LIB/bin/Debug/LIB.pdb
+/root/Documents/Exercise11_IKN/LIB/bin/Debug/System.dll
+/root/Documents/Exercise11_IKN/LIB/obj/Debug/LIB.csproj.CoreCompileInputs.cache
+/root/Documents/Exercise11_IKN/LIB/obj/Debug/LIB.dll
+/root/Documents/Exercise11_IKN/LIB/obj/Debug/LIB.pdb

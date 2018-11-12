@@ -62,7 +62,37 @@ namespace Linklaget
 		/// </param>
 		public void send (byte[] buf, int size)
 		{
-	    	// TO DO Your own code
+			int bufferIndex = 0;
+			buffer[bufferIndex] = Convert.ToByte('A');
+			++bufferIndex;
+            
+			for (int i = 0; i < size; ++i)
+			{
+				if(buf[i] == 'A')
+				{
+					buffer[bufferIndex] = Convert.ToByte('B');
+					++bufferIndex;
+					buffer[bufferIndex] = Convert.ToByte('C');
+					++bufferIndex;
+				}
+				else if (buf[i] == 'B')
+                {
+					buffer[bufferIndex] = Convert.ToByte('B');
+					++bufferIndex;
+					buffer[bufferIndex] = Convert.ToByte('D');
+					++bufferIndex;
+                }
+				else
+				{
+					buffer[bufferIndex] = buf[i];
+					++bufferIndex;
+				}
+			}
+
+			buffer[bufferIndex] = Convert.ToByte('A');
+			++bufferIndex;
+
+			serialPort.Write(buffer, 0, bufferIndex);
 		}
 
 		/// <summary>

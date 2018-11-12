@@ -1,9 +1,6 @@
 using System;
 using Linklaget;
 
-/// <summary>
-/// Transport.
-/// </summary>
 namespace Transportlaget
 {
 	/// <summary>
@@ -126,6 +123,7 @@ namespace Transportlaget
 		public int receive (ref byte[] buf)
 		{
 			// TO DO Your own code
+			return 0;
 		}
 	}
 }
