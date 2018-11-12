@@ -47,7 +47,7 @@ namespace Application
 		/// </param>
 		public static void Main (string[] args)
 		{
-			new file_server();
+			file_server _file_server = new file_server();
 		}
 	}
 }

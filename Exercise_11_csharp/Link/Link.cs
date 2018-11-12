@@ -1,9 +1,6 @@
 using System;
 using System.IO.Ports;
 
-/// <summary>
-/// Link.
-/// </summary>
 namespace Linklaget
 {
 	/// <summary>
