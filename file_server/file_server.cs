@@ -23,12 +23,14 @@ namespace Application
 			byte[] buf = new byte[BUFSIZE];
 
 			buf[0] = Convert.ToByte('K');
-			buf[0] = Convert.ToByte('A');
-			buf[0] = Convert.ToByte('T');
-			buf[0] = Convert.ToByte('B');
-			buf[0] = Convert.ToByte('B');
-			buf[0] = Convert.ToByte('A');
-			buf[0] = Convert.ToByte('K');
+			buf[1] = Convert.ToByte('A');
+			buf[2] = Convert.ToByte('T');
+			buf[3] = Convert.ToByte('B');
+			buf[4] = Convert.ToByte('B');
+			buf[5] = Convert.ToByte('A');
+			buf[6] = Convert.ToByte('K');
+
+			Console.ReadKey();
 
 			_transport.send(buf, 7);
 		}
