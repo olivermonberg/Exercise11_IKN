@@ -111,7 +111,7 @@ namespace Transportlaget
 		/// </param>
 		public void send(byte[] buf, int size)
 		{
-			// TO DO Your own code
+			link.send(buf, size);
 		}
 
 		/// <summary>
@@ -122,8 +122,7 @@ namespace Transportlaget
 		/// </param>
 		public int receive (ref byte[] buf)
 		{
-			// TO DO Your own code
-			return 0;
+			return link.receive(ref buf);
 		}
 	}
 }

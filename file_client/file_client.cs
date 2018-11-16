@@ -28,7 +28,7 @@ namespace Application
 		/// </param>
 	    private file_client(String[] args)
 	    {
-	    	// TO DO Your own code
+			receiveFile("fileName", new Transport(BUFSIZE, APP));
 	    }
 
 		/// <summary>
@@ -42,7 +42,14 @@ namespace Application
 		/// </param>
 		private void receiveFile (String fileName, Transport transport)
 		{
-			// TO DO Your own code
+			//FileStream fs = File.Create(fileName);
+
+			byte[] buf = new byte[BUFSIZE];
+
+			transport.receive(ref buf);
+
+			Console.WriteLine($"{buf.ToString()}");
+			Console.ReadKey();
 		}
 
 		/// <summary>
@@ -53,7 +60,7 @@ namespace Application
 		/// </param>
 		public static void Main (string[] args)
 		{
-			new file_client(args);
+			file_client _file_client = new file_client(args);
 		}
 	}
 }

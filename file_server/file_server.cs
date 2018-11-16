@@ -19,7 +19,18 @@ namespace Application
 		/// </summary>
 		private file_server ()
 		{
-			// TO DO Your own code
+			Transport _transport = new Transport(BUFSIZE, APP);
+			byte[] buf = new byte[BUFSIZE];
+
+			buf[0] = Convert.ToByte('K');
+			buf[0] = Convert.ToByte('A');
+			buf[0] = Convert.ToByte('T');
+			buf[0] = Convert.ToByte('B');
+			buf[0] = Convert.ToByte('B');
+			buf[0] = Convert.ToByte('A');
+			buf[0] = Convert.ToByte('K');
+
+			_transport.send(buf, 7);
 		}
 
 		/// <summary>
@@ -36,7 +47,26 @@ namespace Application
 		/// </param>
 		private void sendFile(String fileName, long fileSize, Transport transport)
 		{
-			// TO DO Your own code
+			FileStream fs = new FileStream(fileName, FileMode.Open);
+
+			byte[] fileBuf = new byte[BUFSIZE];
+
+			int offset = 0;
+			int size = BUFSIZE;
+
+            while(offset < fileSize)
+			{
+				fs.Read(fileBuf, 0, size);
+                
+				transport.send(fileBuf, size);
+
+				offset += BUFSIZE;
+
+				if ((offset < fileSize) && (offset + BUFSIZE > fileSize))
+                {
+                    size = (int)fileSize - offset;
+                }
+			}
 		}
 
 		/// <summary>

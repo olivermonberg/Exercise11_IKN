@@ -106,8 +106,41 @@ namespace Linklaget
 		/// </param>
 		public int receive (ref byte[] buf)
 		{
-	    	// TO DO Your own code
-			return 0;
+			int readByte = 0, readSecondByte = 0, i = 0;
+
+			while(readByte != (int)Convert.ToByte('A'))
+			{
+				readByte = serialPort.ReadByte();
+			}
+
+			readByte = 0;
+
+			while(readByte != (int)Convert.ToByte('A'))
+			{
+				readByte = serialPort.ReadByte();
+
+				if(readByte == (int)Convert.ToByte('B'))
+				{
+					readSecondByte = serialPort.ReadByte();
+
+					if(readSecondByte == (int)Convert.ToByte('C'))
+					{
+						buf[i] = Convert.ToByte('A');
+					}
+					else if (readSecondByte == (int)Convert.ToByte('D'))
+                    {
+                        buf[i] = Convert.ToByte('B');
+                    }
+				}
+				else if (readByte != (int)Convert.ToByte('A'))
+				{
+					buf[i] = Convert.ToByte(readByte);
+				}
+
+				++i;
+			}
+
+			return i-1;
 		}
 	}
 }
