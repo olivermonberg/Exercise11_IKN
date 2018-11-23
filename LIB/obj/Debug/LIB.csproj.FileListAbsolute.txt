@@ -10,3 +10,4 @@
 /root/Documents/Exercise11_IKN/LIB/obj/Debug/LIB.csproj.CoreCompileInputs.cache
 /root/Documents/Exercise11_IKN/LIB/obj/Debug/LIB.dll
 /root/Documents/Exercise11_IKN/LIB/obj/Debug/LIB.pdb
+/root/Documents/Exercise11_IKN/LIB/obj/Debug/LIB.csprojResolveAssemblyReference.cache

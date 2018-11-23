@@ -48,7 +48,7 @@ namespace Application
 
 			transport.receive(ref buf);
 
-			Console.WriteLine($"{buf.ToString()}");
+			Console.WriteLine($"{System.Text.Encoding.Default.GetString(buf)}");
 			Console.ReadKey();
 		}
 

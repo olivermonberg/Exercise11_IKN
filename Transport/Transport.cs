@@ -111,7 +111,35 @@ namespace Transportlaget
 		/// </param>
 		public void send(byte[] buf, int size)
 		{
-			link.send(buf, size);
+			buffer[(int)TransCHKSUM.SEQNO] = seqNo;
+			buffer[(int)TransCHKSUM.TYPE] = (int)TransType.DATA;
+            
+			for (int i = 4; i < size + 4; i++)
+			{
+				buffer[i] = buf[i];
+			}
+
+			checksum.calcChecksum(ref buffer, size);
+
+            link.send(buffer, size);
+
+			int _numberOfRetransmits = 0;
+			while(!receiveAck() && _numberOfRetransmits < 4)
+			{
+				link.send(buffer, size);
+				++_numberOfRetransmits;
+                
+				if (_numberOfRetransmits == 4)
+                {
+                    Console.WriteLine("Transmission failed.");
+					return;
+                }            
+			}         
+
+			/*if (seqNo == 0)
+				seqNo = 1;
+			else if (seqNo == 1)
+				seqNo = 0;*/         
 		}
 
 		/// <summary>
@@ -122,7 +150,28 @@ namespace Transportlaget
 		/// </param>
 		public int receive (ref byte[] buf)
 		{
-			return link.receive(ref buf);
+			bool _isSeqNoDifferent = false;
+			bool _isCheckSumOk = false;
+			int len = -1;
+
+            do
+			{
+				len = link.receive(ref buffer);
+				_isCheckSumOk = checksum.checkChecksum(buffer, len);
+
+				if(buffer[(int)TransCHKSUM.SEQNO] != old_seqNo)
+					_isSeqNoDifferent = true;
+				
+				if (!_isCheckSumOk || !_isSeqNoDifferent)
+					sendAck(false);
+				else
+					sendAck(true);
+
+			}while(_isSeqNoDifferent && _isCheckSumOk);
+
+			old_seqNo = buffer[(int)TransCHKSUM.SEQNO];
+
+			return len;
 		}
 	}
 }

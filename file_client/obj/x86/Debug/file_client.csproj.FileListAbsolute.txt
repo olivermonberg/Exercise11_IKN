@@ -7,6 +7,10 @@
 /root/Documents/Exercise11_IKN/file_client/bin/Debug/LIB.dll.mdb
 /root/Documents/Exercise11_IKN/file_client/bin/Debug/Transport.pdb
 /root/Documents/Exercise11_IKN/file_client/bin/Debug/Link.pdb
+<<<<<<< HEAD
+=======
+/root/Documents/Exercise11_IKN/file_client/obj/x86/Debug/file_client.csprojResolveAssemblyReference.cache
+>>>>>>> 77e82fec6e8e31898edf45320e9d3b4525ba88bf
 /root/Documents/Exercise11_IKN/file_client/obj/x86/Debug/file_client.csproj.CoreCompileInputs.cache
 /root/Documents/Exercise11_IKN/file_client/obj/x86/Debug/file_client.exe
 /root/Documents/Exercise11_IKN/file_client/obj/x86/Debug/file_client.pdb
