@@ -1,12 +1,13 @@
 ﻿<Properties StartupConfiguration="{421BDA4C-999D-4B14-B645-E15BA7136554}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Transport/TransConst.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="LIB/LIB.cs">
     <Files>
-      <File FileName="Link/Link.cs" Line="55" Column="1" />
-      <File FileName="file_server/file_server.cs" Line="48" Column="10" />
-      <File FileName="Transport/Transport.cs" Line="36" Column="25" />
-      <File FileName="file_client/file_client.cs" Line="1" Column="1" />
-      <File FileName="Transport/Checksum.cs" Line="1" Column="1" />
-      <File FileName="Transport/TransConst.cs" Line="1" Column="1" />
+      <File FileName="Link/Link.cs" Line="134" Column="14" />
+      <File FileName="file_server/file_server.cs" Line="52" Column="4" />
+      <File FileName="Transport/Transport.cs" Line="182" Column="28" />
+      <File FileName="file_client/file_client.cs" Line="52" Column="22" />
+      <File FileName="Transport/Checksum.cs" Line="36" Column="1" />
+      <File FileName="Transport/TransConst.cs" Line="11" Column="25" />
+      <File FileName="LIB/LIB.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

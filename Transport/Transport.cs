@@ -113,20 +113,22 @@ namespace Transportlaget
 		{
 			buffer[(int)TransCHKSUM.SEQNO] = seqNo;
 			buffer[(int)TransCHKSUM.TYPE] = (int)TransType.DATA;
-            
+
+			int index = 0;
 			for (int i = 4; i < size + 4; i++)
 			{
-				buffer[i] = buf[i];
+				buffer[i] = buf[index];
+				++index;
 			}
 
 			checksum.calcChecksum(ref buffer, size);
 
-            link.send(buffer, size);
+            link.send(buffer, size+4);
 
 			int _numberOfRetransmits = 0;
 			while(!receiveAck() && _numberOfRetransmits < 4)
 			{
-				link.send(buffer, size);
+				link.send(buffer, size+4);
 				++_numberOfRetransmits;
                 
 				if (_numberOfRetransmits == 4)
@@ -151,27 +153,35 @@ namespace Transportlaget
 		public int receive (ref byte[] buf)
 		{
 			bool _isSeqNoDifferent = false;
-			bool _isCheckSumOk = false;
-			int len = -1;
+            bool _isCheckSumOk = false;
+            int len = -1;
 
             do
-			{
-				len = link.receive(ref buffer);
-				_isCheckSumOk = checksum.checkChecksum(buffer, len);
+            {
+                len = link.receive(ref buffer);
+                _isCheckSumOk = checksum.checkChecksum(buffer, len);
 
-				if(buffer[(int)TransCHKSUM.SEQNO] != old_seqNo)
-					_isSeqNoDifferent = true;
-				
-				if (!_isCheckSumOk || !_isSeqNoDifferent)
-					sendAck(false);
-				else
-					sendAck(true);
+                if (buffer[(int)TransCHKSUM.SEQNO] != old_seqNo)
+                    _isSeqNoDifferent = true;
 
-			}while(_isSeqNoDifferent && _isCheckSumOk);
+                if (!_isCheckSumOk || !_isSeqNoDifferent)
+                    sendAck(false);
+                else
+                    sendAck(true);
 
-			old_seqNo = buffer[(int)TransCHKSUM.SEQNO];
+            } while (!_isSeqNoDifferent && !_isCheckSumOk);
 
-			return len;
+            old_seqNo = buffer[(int)TransCHKSUM.SEQNO];
+
+            int index = 0;
+            for (int i = 4; i < len + 4; ++i)
+            {
+                buf[index] = buffer[i];
+                ++index;
+            }
+            //buf = buffer;
+
+            return len-4;
 		}
 	}
 }

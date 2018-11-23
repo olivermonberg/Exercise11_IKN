@@ -28,7 +28,31 @@ namespace Application
 		/// </param>
 	    private file_client(String[] args)
 	    {
-			receiveFile("fileName", new Transport(BUFSIZE, APP));
+			Console.ReadKey();
+
+            Transport _transport = new Transport(BUFSIZE, APP);
+            //byte[] buffer = new byte[BUFSIZE];
+
+            string filePath = "/root/original_boxfish.jpg/";
+
+            while (true)
+            {
+                receiveFile(filePath, new Transport(BUFSIZE, APP));
+            }
+
+
+            /*
+            long fileSize = 40000088;
+            byte[] fileSizeByteAr = new byte[1000];
+
+            //fileSizeByteAr = BitConverter.GetBytes(fileSize);
+
+            fileSizeByteAr[0] = 88;
+            fileSizeByteAr[1] = 90;
+            fileSizeByteAr[2] = 98;
+            fileSizeByteAr[3] = 2;
+
+            long newFileSize = BitConverter.ToInt64(fileSizeByteAr, 0);*/
 	    }
 
 		/// <summary>
@@ -40,16 +64,53 @@ namespace Application
 		/// <param name='transport'>
 		/// Transportlaget
 		/// </param>
-		private void receiveFile (String fileName, Transport transport)
+		private void receiveFile (String filePath, Transport transport)
 		{
-			//FileStream fs = File.Create(fileName);
+			byte[] buffer = new byte[BUFSIZE];
 
-			byte[] buf = new byte[BUFSIZE];
+            buffer = Encoding.ASCII.GetBytes(filePath);
+            transport.send(buffer, buffer.Length);
 
-			transport.receive(ref buf);
+            transport.receive(ref buffer);
+            long fileSize = BitConverter.ToInt64(buffer, 0);
 
-			Console.WriteLine($"{System.Text.Encoding.Default.GetString(buf)}");
-			Console.ReadKey();
+            if (fileSize == 0)
+            {
+                Console.WriteLine("Could not find file, please try again.");
+            }
+            else
+            {
+                Console.WriteLine($"FileSize: {fileSize.ToString()} bytes.");
+                Console.WriteLine("Choose where to save the file, name and filetype.");
+
+                FileStream fs = File.Create(Console.ReadLine());
+
+                int count = 1000, lastRead = 1;
+
+                while (lastRead >= 0)
+                {
+                    transport.receive(ref buffer);
+                    fs.Write(buffer, 0, count);
+
+                    fileSize -= 1000;
+
+                    if (fileSize < 1000)
+                    {
+                        count = (int)fileSize;
+                        --lastRead;
+                    }
+                }
+                fs.Close();
+            }
+
+            //FileStream fs = File.Create(fileName);
+
+            /*byte[] buf = new byte[BUFSIZE];
+
+            transport.receive(ref buf);
+
+            Console.WriteLine($"{System.Text.Encoding.Default.GetString(buf)}");
+            Console.ReadKey();*/
 		}
 
 		/// <summary>

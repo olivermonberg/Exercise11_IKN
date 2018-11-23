@@ -20,7 +20,42 @@ namespace Application
 		private file_server ()
 		{
 			Transport _transport = new Transport(BUFSIZE, APP);
-			byte[] buf = new byte[BUFSIZE];
+
+			byte[] buffer = new byte[1000];
+
+            while(true)
+			{
+				int len = 0;
+
+				len = _transport.receive(ref buffer);
+				string filePath = Encoding.Default.GetString(buffer, 0, len);
+                
+				long fileSize = LIB.check_File_Exists(filePath);
+				Console.WriteLine($"Received file path: {filePath}");
+
+				buffer = BitConverter.GetBytes(fileSize);
+                _transport.send(buffer, buffer.Length);
+                
+                if (fileSize == 0)
+                {
+                    Console.WriteLine("Could not find file.");
+                }
+                else
+                {
+					Console.WriteLine($"Filesize: {fileSize} bytes");
+
+
+
+					sendFile(filePath, fileSize, _transport);
+                }
+
+				//len = _transport.receive(ref receiveBuffer);
+				//long fileSize = BitConverter.ToInt64(receiveBuffer, 0);
+
+
+			}
+
+			/*byte[] buf = new byte[BUFSIZE];
 
 			buf[0] = Convert.ToByte('K');
 			buf[1] = Convert.ToByte('A');
@@ -32,7 +67,7 @@ namespace Application
 
 			Console.ReadKey();
 
-			_transport.send(buf, 7);
+			_transport.send(buf, 7);*/
 		}
 
 		/// <summary>
@@ -48,7 +83,7 @@ namespace Application
 		/// Tl.
 		/// </param>
 		private void sendFile(String fileName, long fileSize, Transport transport)
-		{
+		{         
 			FileStream fs = new FileStream(fileName, FileMode.Open);
 
 			byte[] fileBuf = new byte[BUFSIZE];
