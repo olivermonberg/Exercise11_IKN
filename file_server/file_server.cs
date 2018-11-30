@@ -18,17 +18,17 @@ namespace Application
 		/// Initializes a new instance of the <see cref="file_server"/> class.
 		/// </summary>
 		private file_server ()
-		{
-			Transport _transport = new Transport(BUFSIZE, APP);
-
-			byte[] buffer = new byte[1000];
-
+		{         
             while(true)
 			{
+				Transport _transport = new Transport(BUFSIZE, APP);
 				int len = 0;
+				byte[] buffer = new byte[BUFSIZE];
 
 				len = _transport.receive(ref buffer);
 				string filePath = Encoding.Default.GetString(buffer, 0, len);
+
+				buffer = new byte[BUFSIZE];
                 
 				long fileSize = LIB.check_File_Exists(filePath);
 				Console.WriteLine($"Received file path: {filePath}");
@@ -38,36 +38,16 @@ namespace Application
                 
                 if (fileSize == 0)
                 {
-                    Console.WriteLine("Could not find file.");
+                    Console.WriteLine("Could not find file.\n");
                 }
                 else
                 {
 					Console.WriteLine($"Filesize: {fileSize} bytes");
-
-
-
+					Console.WriteLine("Sending file...");
 					sendFile(filePath, fileSize, _transport);
-                }
-
-				//len = _transport.receive(ref receiveBuffer);
-				//long fileSize = BitConverter.ToInt64(receiveBuffer, 0);
-
-
+					Console.WriteLine("File sent.\n");
+                }            
 			}
-
-			/*byte[] buf = new byte[BUFSIZE];
-
-			buf[0] = Convert.ToByte('K');
-			buf[1] = Convert.ToByte('A');
-			buf[2] = Convert.ToByte('T');
-			buf[3] = Convert.ToByte('B');
-			buf[4] = Convert.ToByte('B');
-			buf[5] = Convert.ToByte('A');
-			buf[6] = Convert.ToByte('K');
-
-			Console.ReadKey();
-
-			_transport.send(buf, 7);*/
 		}
 
 		/// <summary>
@@ -104,6 +84,8 @@ namespace Application
                     size = (int)fileSize - offset;
                 }
 			}
+			fs.Close();
+            
 		}
 
 		/// <summary>

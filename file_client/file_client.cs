@@ -28,31 +28,8 @@ namespace Application
 		/// </param>
 	    private file_client(String[] args)
 	    {
-			Console.ReadKey();
-
-            Transport _transport = new Transport(BUFSIZE, APP);
-            //byte[] buffer = new byte[BUFSIZE];
-
-            string filePath = "/root/original_boxfish.jpg/";
-
-            while (true)
-            {
-                receiveFile(filePath, new Transport(BUFSIZE, APP));
-            }
-
-
-            /*
-            long fileSize = 40000088;
-            byte[] fileSizeByteAr = new byte[1000];
-
-            //fileSizeByteAr = BitConverter.GetBytes(fileSize);
-
-            fileSizeByteAr[0] = 88;
-            fileSizeByteAr[1] = 90;
-            fileSizeByteAr[2] = 98;
-            fileSizeByteAr[3] = 2;
-
-            long newFileSize = BitConverter.ToInt64(fileSizeByteAr, 0);*/
+			Transport _transport = new Transport(BUFSIZE, APP);   
+            receiveFile(args[0], new Transport(BUFSIZE, APP)); 
 	    }
 
 		/// <summary>
@@ -71,6 +48,8 @@ namespace Application
             buffer = Encoding.ASCII.GetBytes(filePath);
             transport.send(buffer, buffer.Length);
 
+			buffer = new byte[BUFSIZE];
+
             transport.receive(ref buffer);
             long fileSize = BitConverter.ToInt64(buffer, 0);
 
@@ -85,7 +64,9 @@ namespace Application
 
                 FileStream fs = File.Create(Console.ReadLine());
 
-                int count = 1000, lastRead = 1;
+				Console.WriteLine("Downloading...");
+                
+				int count = 1000, lastRead = 1;
 
                 while (lastRead >= 0)
                 {
@@ -101,16 +82,9 @@ namespace Application
                     }
                 }
                 fs.Close();
+
+				Console.WriteLine("File downloaded.");
             }
-
-            //FileStream fs = File.Create(fileName);
-
-            /*byte[] buf = new byte[BUFSIZE];
-
-            transport.receive(ref buf);
-
-            Console.WriteLine($"{System.Text.Encoding.Default.GetString(buf)}");
-            Console.ReadKey();*/
 		}
 
 		/// <summary>

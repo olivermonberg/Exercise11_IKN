@@ -121,7 +121,7 @@ namespace Transportlaget
 				++index;
 			}
 
-			checksum.calcChecksum(ref buffer, size);
+			checksum.calcChecksum(ref buffer, size+4);
 
             link.send(buffer, size+4);
 
@@ -136,12 +136,7 @@ namespace Transportlaget
                     Console.WriteLine("Transmission failed.");
 					return;
                 }            
-			}         
-
-			/*if (seqNo == 0)
-				seqNo = 1;
-			else if (seqNo == 1)
-				seqNo = 0;*/         
+			}               
 		}
 
 		/// <summary>
@@ -174,12 +169,11 @@ namespace Transportlaget
             old_seqNo = buffer[(int)TransCHKSUM.SEQNO];
 
             int index = 0;
-            for (int i = 4; i < len + 4; ++i)
+            for (int i = 4; i < len; ++i)
             {
                 buf[index] = buffer[i];
                 ++index;
             }
-            //buf = buffer;
 
             return len-4;
 		}
