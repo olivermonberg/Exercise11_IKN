@@ -97,6 +97,13 @@ namespace Transportlaget
 				(ackType ? (byte)buffer [(int)TransCHKSUM.SEQNO] : (byte)(buffer [(int)TransCHKSUM.SEQNO] + 1) % 2);
 			ackBuf [(int)TransCHKSUM.TYPE] = (byte)(int)TransType.ACK;
 			checksum.calcChecksum (ref ackBuf, (int)TransSize.ACKSIZE);
+
+			if (++errorCount == 3) // Simulate noise
+            {
+                ackBuf[1]++; // Important: Only spoil a checksum-field (ackBuf[0] or ackBuf[1])
+                Console.WriteLine("Noise! byte #1 is spoiled in the third transmitted ACK-package");
+            }
+
 			link.send(ackBuf, (int)TransSize.ACKSIZE);
 		}
 
@@ -121,13 +128,19 @@ namespace Transportlaget
 				++index;
 			}
 
-			checksum.calcChecksum(ref buffer, size+4);
-
+			checksum.calcChecksum(ref buffer, size+4);         
+            
             link.send(buffer, size+4);
 
 			int _numberOfRetransmits = 0;
 			while(!receiveAck() && _numberOfRetransmits < 4)
 			{
+				if (++errorCount == 3) // Simulate noise
+                {
+                    buffer[1]++; // Important: Only spoil a checksum-field (buffer[0] or buffer[1])
+                    Console.WriteLine("Noise!-byte #1 is spoiled in the third transmission");
+                }
+
 				link.send(buffer, size+4);
 				++_numberOfRetransmits;
                 
@@ -136,7 +149,8 @@ namespace Transportlaget
                     Console.WriteLine("Transmission failed.");
 					return;
                 }            
-			}               
+			}
+			old_seqNo = DEFAULT_SEQNO;
 		}
 
 		/// <summary>
@@ -151,9 +165,11 @@ namespace Transportlaget
             bool _isCheckSumOk = false;
             int len = -1;
 
+			int _numberOfTransmits = 0;
             do
             {
-                len = link.receive(ref buffer);
+				++_numberOfTransmits;
+				len = link.receive(ref buffer);
                 _isCheckSumOk = checksum.checkChecksum(buffer, len);
 
                 if (buffer[(int)TransCHKSUM.SEQNO] != old_seqNo)
@@ -164,7 +180,12 @@ namespace Transportlaget
                 else
                     sendAck(true);
 
-            } while (!_isSeqNoDifferent && !_isCheckSumOk);
+            } while (!_isSeqNoDifferent && !_isCheckSumOk && _numberOfTransmits < 5);
+
+			if(_numberOfTransmits > 4)
+			{
+				Console.WriteLine("Fail");
+			}
 
             old_seqNo = buffer[(int)TransCHKSUM.SEQNO];
 

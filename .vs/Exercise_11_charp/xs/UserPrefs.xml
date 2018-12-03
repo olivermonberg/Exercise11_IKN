@@ -2,12 +2,12 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="LIB/LIB.cs">
     <Files>
       <File FileName="Link/Link.cs" Line="134" Column="14" />
-      <File FileName="file_server/file_server.cs" Line="52" Column="4" />
-      <File FileName="Transport/Transport.cs" Line="182" Column="28" />
-      <File FileName="file_client/file_client.cs" Line="52" Column="22" />
+      <File FileName="file_server/file_server.cs" Line="52" Column="1" />
+      <File FileName="Transport/Transport.cs" Line="182" Column="25" />
+      <File FileName="file_client/file_client.cs" Line="52" Column="1" />
       <File FileName="Transport/Checksum.cs" Line="36" Column="1" />
       <File FileName="Transport/TransConst.cs" Line="11" Column="25" />
-      <File FileName="LIB/LIB.cs" Line="11" Column="4" />
+      <File FileName="LIB/LIB.cs" Line="25" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
