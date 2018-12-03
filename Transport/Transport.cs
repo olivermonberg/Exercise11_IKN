@@ -166,7 +166,13 @@ namespace Transportlaget
                 else
                     sendAck(true);
 
-            } while (!_isSeqNoDifferent && !_isCheckSumOk);
+            } while (!_isSeqNoDifferent && !_isCheckSumOk && _numberOfTransmits <= 5);
+
+            if(_numberOfTransmits == 5)
+			{
+				Console.WriteLine("Transmission failed;");
+				return -1;
+			}
 
             old_seqNo = buffer[(int)TransCHKSUM.SEQNO];
 
