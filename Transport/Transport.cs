@@ -166,7 +166,7 @@ namespace Transportlaget
                 else
                     sendAck(true);
 
-            } while (!_isSeqNoDifferent && !_isCheckSumOk && _numberOfTransmits <= 5);
+            } while (!_isSeqNoDifferent && !_isCheckSumOk && _numberOfTransmits < 5);
 
             if(_numberOfTransmits == 5)
 			{
