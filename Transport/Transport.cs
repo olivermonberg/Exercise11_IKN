@@ -151,24 +151,26 @@ namespace Transportlaget
             bool _isCheckSumOk = false;
             int len = -1;
 
-			int _numberOfTransmits = 0;
+			int _numberOfBadTransmits = 0;
             do
             {
-				++_numberOfTransmits;
 				len = link.receive(ref buffer);
                 _isCheckSumOk = checksum.checkChecksum(buffer, len);
 
                 if (buffer[(int)TransCHKSUM.SEQNO] != old_seqNo)
                     _isSeqNoDifferent = true;
 
-                if (!_isCheckSumOk || !_isSeqNoDifferent)
-                    sendAck(false);
+				if (!_isCheckSumOk || !_isSeqNoDifferent)
+				{
+					sendAck(false);
+					++_numberOfBadTransmits;
+				}
                 else
                     sendAck(true);
 
-            } while (!_isSeqNoDifferent && !_isCheckSumOk && _numberOfTransmits < 5);
+            } while (!_isSeqNoDifferent && !_isCheckSumOk && _numberOfBadTransmits < 5);
 
-            if(_numberOfTransmits == 5)
+            if(_numberOfBadTransmits == 5)
 			{
 				Console.WriteLine("Transmission failed;");
 				return -1;
