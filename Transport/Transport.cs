@@ -97,13 +97,6 @@ namespace Transportlaget
 				(ackType ? (byte)buffer [(int)TransCHKSUM.SEQNO] : (byte)(buffer [(int)TransCHKSUM.SEQNO] + 1) % 2);
 			ackBuf [(int)TransCHKSUM.TYPE] = (byte)(int)TransType.ACK;
 			checksum.calcChecksum (ref ackBuf, (int)TransSize.ACKSIZE);
-
-			if (++errorCount == 3) // Simulate noise
-            {
-                ackBuf[1]++; // Important: Only spoil a checksum-field (ackBuf[0] or ackBuf[1])
-                Console.WriteLine("Noise! byte #1 is spoiled in the third transmitted ACK-package");
-            }
-
 			link.send(ackBuf, (int)TransSize.ACKSIZE);
 		}
 
@@ -135,12 +128,6 @@ namespace Transportlaget
 			int _numberOfRetransmits = 0;
 			while(!receiveAck() && _numberOfRetransmits < 4)
 			{
-				if (++errorCount == 3) // Simulate noise
-                {
-                    buffer[1]++; // Important: Only spoil a checksum-field (buffer[0] or buffer[1])
-                    Console.WriteLine("Noise!-byte #1 is spoiled in the third transmission");
-                }
-
 				link.send(buffer, size+4);
 				++_numberOfRetransmits;
                 
@@ -150,7 +137,6 @@ namespace Transportlaget
 					return;
                 }            
 			}
-			old_seqNo = DEFAULT_SEQNO;
 		}
 
 		/// <summary>
@@ -180,12 +166,7 @@ namespace Transportlaget
                 else
                     sendAck(true);
 
-            } while (!_isSeqNoDifferent && !_isCheckSumOk && _numberOfTransmits < 5);
-
-			if(_numberOfTransmits > 4)
-			{
-				Console.WriteLine("Fail");
-			}
+            } while (!_isSeqNoDifferent && !_isCheckSumOk);
 
             old_seqNo = buffer[(int)TransCHKSUM.SEQNO];
 
